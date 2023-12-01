@@ -1,0 +1,19 @@
+<input
+  placeholder="Search Songs"
+  [(ngModel)]="searchText"
+  (ngModelChange)="searchSongs($event)"
+/>
+
+<app-song-list
+  [songLists]="songLists"
+  (onSongViewDetailClicked)="showDetails($event)"
+></app-song-list>
+
+<h1>Songs Details</h1>
+
+<div *ngIf="selectedSong" class="song-detail">
+  <div class="song-name">Name: {{ selectedSong.name }}</div>
+  <div>Singers: {{ selectedSong.singerList.toString() }}</div>
+  <div>Type: {{ selectedSong.type }}</div>
+  <button *ngIf="selectedSong.type !== 'metal'" (click)="changeSongToMetal()">Change to metal</button>
+</div>
