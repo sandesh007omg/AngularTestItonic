@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { DataApiService } from 'src/app/service/data-api.service';
 
 @Component({
   selector: 'app-song-list',
@@ -13,7 +21,11 @@ export class SongListComponent {
   @Output()
   onSongViewDetailClicked: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() {}
+  constructor(private dataApiService: DataApiService, private router: Router) {
+    this.dataApiService.fetchSongs().subscribe((res) => {
+      this.songLists = res;
+    });
+  }
 
   /**
    * Combine List of singers in the form of
@@ -38,6 +50,7 @@ export class SongListComponent {
    */
   viewDetail(song: any) {
     this.onSongViewDetailClicked.emit(song.uri);
+    this.router.navigate(['/details', song?.uri]);
   }
 
   /**
