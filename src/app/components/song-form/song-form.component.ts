@@ -65,7 +65,7 @@ export class SongFormComponent implements OnInit, OnDestroy {
   }
   private saveFormDataToLocalStorage() {
     const formData = this.songForm.value;
-    setToLocalStorage(UNSAVED_DATA,formData)
+    setToLocalStorage(UNSAVED_DATA, formData);
   }
   private loadExistingSongData() {
     this.dataApiService.fetchSongs().subscribe((songs) => {
@@ -124,12 +124,12 @@ export class SongFormComponent implements OnInit, OnDestroy {
   }
   private resetForm() {
     this.songForm.reset();
-    setToLocalStorage(UNSAVED_DATA,this.songForm)
+    setToLocalStorage(UNSAVED_DATA, this.songForm);
   }
   onCancel(): void {
     if (this.isEditPage) {
       this.songForm.patchValue(this.originalFormData);
-      setToLocalStorage(UNSAVED_DATA,{})
+      setToLocalStorage(UNSAVED_DATA, {});
       return;
     }
     this.resetForm();
@@ -144,10 +144,10 @@ export class SongFormComponent implements OnInit, OnDestroy {
 
 export const UNSAVED_DATA = 'UNSAVED_DATA';
 
-export const setToLocalStorage = (param:string,data:any) =>{
+export const setToLocalStorage = (param: string, data: any) => {
   localStorage.setItem(param, JSON.stringify(data));
-}
-export const getFromLocalStorage =(param:string) =>{
+};
+export const getFromLocalStorage = (param: string) => {
   const result = localStorage.getItem(param);
   return result ? JSON.parse(result) : null;
-}
+};

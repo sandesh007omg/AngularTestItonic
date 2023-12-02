@@ -22,11 +22,6 @@ export class SongsComponent {
    *
    * @param name - Name of the song
    */
-  // searchSongs(name: string) {
-  //   this.dataApiService.getSongsByName(name).subscribe((res) => {
-  //     this.songLists = res;
-  //   });
-  // }
 
   /**
    * Show song detail
@@ -41,8 +36,13 @@ export class SongsComponent {
    * Change the selected song into the metal
    */
   changeSongToMetal() {
-    this.selectedSong.type = 'metal';
-
+    // this.selectedSong.type = 'metal';
+    const updatedSong = { ...this.selectedSong, type: 'metal' };
+    const index = this.songLists.findIndex(
+      (song: any) => song.uri === this.selectedSong.uri
+    );
+    this.songLists[index] = updatedSong;
+    this.selectedSong = updatedSong;
     // FIXME Weird behavior, type get updated in the songs list but it is not reflected in the table
   }
 }
