@@ -18,6 +18,7 @@ import { UnsavedDataDialogComponent } from '../unsaved-data-dialog/unsaved-data-
 export class SongFormComponent implements OnInit {
   songUri: string | any;
   songForm: any;
+  isEditPage: boolean = false;
 
   constructor(
     private dataApiService: DataApiService,
@@ -33,9 +34,10 @@ export class SongFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.songUri = params['uri'];
+    this.route.params.subscribe((params: any) => {
+      this.songUri = params?.id;
       if (this.songUri) {
+        this.isEditPage = true;
         this.loadExistingSongData();
       }
     });
@@ -84,7 +86,7 @@ export class SongFormComponent implements OnInit {
     });
   }
 
-  private showUnsavedDataDialog() {
+  showUnsavedDataDialog() {
     const dialogRef = this.dialog.open(UnsavedDataDialogComponent);
     return dialogRef.afterClosed();
   }

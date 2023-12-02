@@ -18,7 +18,10 @@
       </td>
       <td>{{ song.type }}</td>
       <td>{{ combineSingerList(song.singerList) }}</td>
-      <td><button (click)="viewDetail(song)">Detail</button></td>
+      <td>
+        <button (click)="viewEdit(song)">Edit</button>
+        <button (click)="viewDetail(song)">Detail</button>
+      </td>
     </tr>
   </tbody>
 </table>

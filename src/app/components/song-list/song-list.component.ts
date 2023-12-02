@@ -52,6 +52,9 @@ export class SongListComponent {
     this.onSongViewDetailClicked.emit(song.uri);
     this.router.navigate(['/details', song?.uri]);
   }
+  viewEdit(song: any) {
+    this.router.navigate(['/edit', song?.uri]);
+  }
 
   /**
    * Open form with the prefilled data and allow to update the content

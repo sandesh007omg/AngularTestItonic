@@ -6,7 +6,8 @@ import { SongDetailsComponent } from './components/song-details/song-details.com
 
 const routes: Routes = [
   { path: 'songs', component: SongListComponent },
-  { path: 'form', component: SongFormComponent },
+  { path: 'edit/:id', component: SongFormComponent },
+  { path: 'create', component: SongFormComponent },
   { path: 'details/:id', component: SongDetailsComponent },
   { path: '', redirectTo: '/songs', pathMatch: 'full' },
 ];
