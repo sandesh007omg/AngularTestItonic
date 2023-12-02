@@ -1,12 +1,14 @@
-<input
-  class="form-control mr-sm-2"
-  type="search"
-  placeholder="Search Songs"
-  aria-label="Search"
-  [(ngModel)]="searchText"
-  (ngModelChange)="searchSongs($event)"
-/>
-<table>
+<div class="search-wrapper">
+  <input
+    class="form-control mr-sm-2"
+    type="search"
+    placeholder="Search Songs"
+    aria-label="Search"
+    [(ngModel)]="searchText"
+    (ngModelChange)="searchSongs($event)"
+  />
+</div>
+<table className="table">
   <thead>
     <tr>
       <th>S.N</th>
@@ -27,8 +29,12 @@
       <td>{{ song.type }}</td>
       <td>{{ combineSingerList(song.singerList) }}</td>
       <td>
-        <button (click)="viewEdit(song)">Edit</button>
-        <button (click)="viewDetail(song)">Detail</button>
+        <div class="btn-wrapper">
+          <button (click)="viewEdit(song)" class="btn btn-primary">Edit</button>
+          <button (click)="viewDetail(song)" class="btn btn-primary">
+            Detail
+          </button>
+        </div>
       </td>
     </tr>
   </tbody>

@@ -3,6 +3,13 @@ table {
   border-collapse: collapse;
   width: 100%;
   table-layout: fixed;
+  margin: 20px 0;
+}
+
+table {
+  th {
+    background-color: #eee !important;
+  }
 }
 
 td,
@@ -19,5 +26,19 @@ td {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+}
+
+.btn-wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+.search-wrapper {
+  display: flex;
+  justify-content: end;
+  input {
+    width: 300px;
+    margin-top: 12px;
   }
 }

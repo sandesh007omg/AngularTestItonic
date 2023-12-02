@@ -1,10 +1,14 @@
-<h1>Songs Details</h1>
+<h2>Songs Details</h2>
 
 <div *ngIf="selectedSong" class="song-detail">
   <div class="song-name">Name: {{ selectedSong.name }}</div>
   <div>Singers: {{ selectedSong.singerList.toString() }}</div>
   <div>Type: {{ selectedSong.type }}</div>
-  <button *ngIf="selectedSong.type !== 'metal'" (click)="changeSongToMetal()">
+  <button
+    *ngIf="selectedSong.type !== 'metal'"
+    (click)="changeSongToMetal()"
+    class="btn btn-primary"
+  >
     Change to metal
   </button>
 </div>
