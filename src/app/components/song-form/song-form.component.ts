@@ -16,6 +16,7 @@ export class SongFormComponent implements OnInit, OnDestroy {
   songForm: any;
   isEditPage: boolean = false;
   formChangeSubscription!: Subscription;
+  originalFormData: any;
 
   constructor(
     private dataApiService: DataApiService,
@@ -69,11 +70,13 @@ export class SongFormComponent implements OnInit, OnDestroy {
     this.dataApiService.fetchSongs().subscribe((songs) => {
       const existingSong = songs.find((song: any) => song.uri === this.songUri);
       if (existingSong) {
+        this.originalFormData = { ...existingSong };
         this.songForm.patchValue(existingSong);
       }
     });
   }
   getSongForm() {
+    debugger;
     this.markFormControlsAsTouched();
     if (this.songForm.valid) {
       const newSong = this.createSongObject();
@@ -90,12 +93,15 @@ export class SongFormComponent implements OnInit, OnDestroy {
   }
   private createSongObject() {
     const formValue = this.songForm.value;
+    debugger;
     return {
       uri: this.songUri || 'new-song-' + Date.now(),
       name: formValue.name,
-      singerList: formValue.singerList
-        .split(',')
-        .map((singer: string) => singer.trim()),
+      singerList: this.isEditPage
+        ? formValue.singerList
+        : formValue.singerList
+            .split(',')
+            .map((singer: string) => singer.trim()),
       type: formValue.type,
     };
   }
@@ -118,7 +124,13 @@ export class SongFormComponent implements OnInit, OnDestroy {
     this.songForm.reset();
     localStorage.setItem('unsavedFormData', JSON.stringify(this.songForm));
   }
-
+  onCancel(): void {
+    if (this.isEditPage) {
+      this.songForm.patchValue(this.originalFormData);
+      return;
+    }
+    this.resetForm();
+  }
   ngOnDestroy() {
     this.formChangeSubscription.unsubscribe();
   }
