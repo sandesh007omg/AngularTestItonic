@@ -51,7 +51,7 @@ export class SongFormComponent implements OnInit, OnDestroy {
     });
   }
   private prefillUnsavedData() {
-    const unsavedData = this.getUnsavedFormData();
+    const unsavedData = getFromLocalStorage(UNSAVED_DATA);
     const hasUnsavedData = Object.keys(unsavedData).some(
       (property) => unsavedData?.[property]?.length > 0
     );
@@ -63,20 +63,20 @@ export class SongFormComponent implements OnInit, OnDestroy {
       });
     }
   }
-  private getUnsavedFormData(): any {
-    const unsavedData = localStorage.getItem('unsavedFormData');
-    return unsavedData ? JSON.parse(unsavedData) : null;
-  }
   private saveFormDataToLocalStorage() {
     const formData = this.songForm.value;
-    localStorage.setItem('unsavedFormData', JSON.stringify(formData));
+    setToLocalStorage(UNSAVED_DATA,formData)
   }
   private loadExistingSongData() {
     this.dataApiService.fetchSongs().subscribe((songs) => {
       const existingSong = songs.find((song: any) => song.uri === this.songUri);
       if (existingSong) {
-        this.originalFormData = { ...existingSong };
-        this.songForm.patchValue(existingSong);
+        const filteredData = {
+          ...existingSong,
+          singerList: existingSong?.singerList.join(','),
+        };
+        this.originalFormData = { ...filteredData };
+        this.songForm.patchValue({ ...filteredData });
       }
     });
   }
@@ -97,16 +97,15 @@ export class SongFormComponent implements OnInit, OnDestroy {
   }
   private createSongObject() {
     const formValue = this.songForm.value;
-    return {
+    const payload = {
       uri: this.songUri || 'new-song-' + Date.now(),
       name: formValue.name,
-      singerList: this.isEditPage
-        ? formValue.singerList
-        : formValue.singerList
-            .split(',')
-            .map((singer: string) => singer.trim()),
+      singerList: formValue.singerList
+        .split(',')
+        .map((singer: string) => singer.trim()),
       type: formValue.type,
     };
+    return { ...payload };
   }
   private saveSong(song: any) {
     const operation = this.songUri
@@ -125,20 +124,30 @@ export class SongFormComponent implements OnInit, OnDestroy {
   }
   private resetForm() {
     this.songForm.reset();
-    localStorage.setItem('unsavedFormData', JSON.stringify(this.songForm));
+    setToLocalStorage(UNSAVED_DATA,this.songForm)
   }
   onCancel(): void {
     if (this.isEditPage) {
       this.songForm.patchValue(this.originalFormData);
-      localStorage.setItem('unsavedFormData', JSON.stringify({}));
+      setToLocalStorage(UNSAVED_DATA,{})
       return;
     }
     this.resetForm();
   }
   private resetLocalStorage() {
-    localStorage.removeItem('unsavedFormData');
+    localStorage.removeItem(UNSAVED_DATA);
   }
   ngOnDestroy() {
     this.formChangeSubscription.unsubscribe();
   }
+}
+
+export const UNSAVED_DATA = 'UNSAVED_DATA';
+
+export const setToLocalStorage = (param:string,data:any) =>{
+  localStorage.setItem(param, JSON.stringify(data));
+}
+export const getFromLocalStorage =(param:string) =>{
+  const result = localStorage.getItem(param);
+  return result ? JSON.parse(result) : null;
 }

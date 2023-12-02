@@ -13,6 +13,7 @@ import { MatDialogRef } from '@angular/material/dialog';
       <button mat-button (click)="dialogRef.close(false)">No</button>
     </mat-dialog-actions>
   `,
+  styleUrls: ['./unsaved-data-dialog.component.scss'],
 })
 export class UnsavedDataDialogComponent {
   constructor(public dialogRef: MatDialogRef<UnsavedDataDialogComponent>) {}
