@@ -1,24 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataApiService } from 'src/app/service/data-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UnsavedDataDialogComponent } from '../unsaved-data-dialog/unsaved-data-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-song-form',
   templateUrl: './song-form.component.html',
   styleUrls: ['./song-form.component.scss'],
 })
-export class SongFormComponent implements OnInit {
+export class SongFormComponent implements OnInit, OnDestroy {
   songUri: string | any;
   songForm: any;
   isEditPage: boolean = false;
+  formChangeSubscription!: Subscription;
 
   constructor(
     private dataApiService: DataApiService,
@@ -39,8 +36,34 @@ export class SongFormComponent implements OnInit {
       if (this.songUri) {
         this.isEditPage = true;
         this.loadExistingSongData();
+      } else {
+        this.prefillUnsavedData();
       }
     });
+    this.formChangeSubscription = this.songForm.valueChanges.subscribe(() => {
+      this.saveFormDataToLocalStorage();
+    });
+  }
+  private prefillUnsavedData() {
+    const unsavedData = this.getUnsavedFormData();
+    const hasUnsavedData = Object.keys(unsavedData).some(
+      (property) => unsavedData?.[property]?.length > 0
+    );
+    if (hasUnsavedData) {
+      this.showUnsavedDataDialog().subscribe((result) => {
+        if (result === true) {
+          this.songForm.patchValue(unsavedData);
+        }
+      });
+    }
+  }
+  private getUnsavedFormData(): any {
+    const unsavedData = localStorage.getItem('unsavedFormData');
+    return unsavedData ? JSON.parse(unsavedData) : null;
+  }
+  private saveFormDataToLocalStorage() {
+    const formData = this.songForm.value;
+    localStorage.setItem('unsavedFormData', JSON.stringify(formData));
   }
   private loadExistingSongData() {
     this.dataApiService.fetchSongs().subscribe((songs) => {
@@ -83,11 +106,20 @@ export class SongFormComponent implements OnInit {
 
     operation.subscribe(() => {
       this.router.navigate(['/songs']);
+      this.resetForm();
     });
   }
 
   showUnsavedDataDialog() {
     const dialogRef = this.dialog.open(UnsavedDataDialogComponent);
     return dialogRef.afterClosed();
+  }
+  private resetForm() {
+    this.songForm.reset();
+    localStorage.setItem('unsavedFormData', JSON.stringify(this.songForm));
+  }
+
+  ngOnDestroy() {
+    this.formChangeSubscription.unsubscribe();
   }
 }
