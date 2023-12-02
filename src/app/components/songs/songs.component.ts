@@ -9,7 +9,6 @@ import { DataApiService } from 'src/app/service/data-api.service';
 export class SongsComponent {
   songLists: any = [];
   searchText = '';
-
   selectedSong: any;
 
   constructor(private dataApiService: DataApiService) {

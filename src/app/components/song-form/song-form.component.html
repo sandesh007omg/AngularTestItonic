@@ -8,7 +8,15 @@
       placeholder="Enter name"
       formControlName="name"
     />
-    <div class="text-danger">Name is required</div>
+    <div
+      *ngIf="
+        songForm.get('name').hasError('required') &&
+        songForm.get('name')?.touched
+      "
+      class="text-danger"
+    >
+      Name is required
+    </div>
   </div>
   <div class="form-group">
     <label for="singerList">Singer List</label>
@@ -18,7 +26,15 @@
       placeholder="Enter name"
       formControlName="singerList"
     />
-    <div class="text-danger">Singer List is required</div>
+    <div
+      *ngIf="
+        songForm.get('singerList').hasError('required') &&
+        songForm.get('singerList')?.touched
+      "
+      class="text-danger"
+    >
+      Singer List is required
+    </div>
   </div>
   <div class="form-group">
     <label for="type">Song Type</label>
@@ -31,7 +47,15 @@
       <option value="rock">Jazz</option>
       <!-- Add more options as needed -->
     </select>
-    <div class="text-danger">Type is required</div>
+    <div
+      *ngIf="
+        songForm.get('type').hasError('required') &&
+        songForm.get('type')?.touched
+      "
+      class="text-danger"
+    >
+      Type is required
+    </div>
   </div>
   <div class="btn-footer">
     <button type="submit" class="btn btn-primary">Submit</button>
