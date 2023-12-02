@@ -31,6 +31,5 @@ export class SongDetailsComponent {
     this.selectedSong.type = 'metal';
 
     // // FIXME Weird behavior, type get updated in the songs list but it is not reflected in the table
-    // console.log(this.songLists);
   }
 }

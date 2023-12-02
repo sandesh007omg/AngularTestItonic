@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { songsCollection } from '../mockData/songs';
 
 @Injectable({
@@ -8,6 +8,9 @@ import { songsCollection } from '../mockData/songs';
 export class DataApiService {
   // Cache the songs list
   private allSongs = songsCollection;
+  private songListSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(
+    []
+  );
 
   constructor() {}
 
@@ -26,13 +29,19 @@ export class DataApiService {
    * @param songName
    * @returns
    */
-  public getSongsByName(songName: string) {
-    const songs = this.allSongs.filter((song) => song.name.includes(songName));
+  public getList(): Observable<any> {
+    this.allSongs = songsCollection;
+    return of(this.allSongs);
+  }
+  public setSongList(list: any[]): void {
+    this.allSongs = list;
+    this.songListSubject.next(list);
+  }
 
+  public getSongsByName(songName: string): Observable<any> {
+    const songs = this.allSongs.filter((song) => song.name.includes(songName));
     return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next(songs);
-      }, 2000);
+      observer.next(songs);
     });
   }
 

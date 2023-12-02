@@ -6,6 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs';
 import { DataApiService } from 'src/app/service/data-api.service';
 
 @Component({
@@ -17,16 +18,18 @@ import { DataApiService } from 'src/app/service/data-api.service';
 export class SongListComponent {
   @Input()
   songLists: any = [];
-
+  searchText: any = '';
   @Output()
   onSongViewDetailClicked: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private dataApiService: DataApiService, private router: Router) {
+    this.getList();
+  }
+  getList() {
     this.dataApiService.fetchSongs().subscribe((res) => {
       this.songLists = res;
     });
   }
-
   /**
    * Combine List of singers in the form of
    * eg.
@@ -55,11 +58,10 @@ export class SongListComponent {
   viewEdit(song: any) {
     this.router.navigate(['/edit', song?.uri]);
   }
-
-  /**
-   * Open form with the prefilled data and allow to update the content
-   */
-  editSongs() {
-    // Place your logic
+  searchSongs(event: any) {
+    this.dataApiService.getList().subscribe((data) => {
+      const songs = data.filter((song: any) => song.name.includes(event));
+      this.songLists = songs ?? [];
+    });
   }
 }

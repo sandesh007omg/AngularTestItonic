@@ -22,11 +22,11 @@ export class SongsComponent {
    *
    * @param name - Name of the song
    */
-  searchSongs(name: string) {
-    this.dataApiService.getSongsByName(name).subscribe((res) => {
-      this.songLists = res;
-    });
-  }
+  // searchSongs(name: string) {
+  //   this.dataApiService.getSongsByName(name).subscribe((res) => {
+  //     this.songLists = res;
+  //   });
+  // }
 
   /**
    * Show song detail
@@ -44,6 +44,5 @@ export class SongsComponent {
     this.selectedSong.type = 'metal';
 
     // FIXME Weird behavior, type get updated in the songs list but it is not reflected in the table
-    console.log(this.songLists);
   }
 }

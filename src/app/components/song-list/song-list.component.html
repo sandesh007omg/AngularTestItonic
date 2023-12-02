@@ -1,3 +1,11 @@
+<input
+  class="form-control mr-sm-2"
+  type="search"
+  placeholder="Search Songs"
+  aria-label="Search"
+  [(ngModel)]="searchText"
+  (ngModelChange)="searchSongs($event)"
+/>
 <table>
   <thead>
     <tr>
