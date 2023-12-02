@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SongsComponent } from './components/songs/songs.component';
 import { SongFormComponent } from './components/song-form/song-form.component';
 import { SongDetailsComponent } from './components/song-details/song-details.component';
+import { UnsavedDataDialogComponent } from './components/unsaved-data-dialog/unsaved-data-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -16,8 +18,15 @@ import { SongDetailsComponent } from './components/song-details/song-details.com
     SongsComponent,
     SongFormComponent,
     SongDetailsComponent,
+    UnsavedDataDialogComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

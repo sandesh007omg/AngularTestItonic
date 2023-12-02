@@ -7,6 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { DataApiService } from 'src/app/service/data-api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UnsavedDataDialogComponent } from '../unsaved-data-dialog/unsaved-data-dialog.component';
 
 @Component({
   selector: 'app-song-form',
@@ -21,7 +23,7 @@ export class SongFormComponent implements OnInit {
     private dataApiService: DataApiService,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder
+    private dialog: MatDialog
   ) {
     this.songForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
@@ -80,5 +82,10 @@ export class SongFormComponent implements OnInit {
     operation.subscribe(() => {
       this.router.navigate(['/songs']);
     });
+  }
+
+  private showUnsavedDataDialog() {
+    const dialogRef = this.dialog.open(UnsavedDataDialogComponent);
+    return dialogRef.afterClosed();
   }
 }
