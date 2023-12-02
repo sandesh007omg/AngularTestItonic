@@ -76,7 +76,6 @@ export class SongFormComponent implements OnInit, OnDestroy {
     });
   }
   getSongForm() {
-    debugger;
     this.markFormControlsAsTouched();
     if (this.songForm.valid) {
       const newSong = this.createSongObject();
@@ -93,7 +92,6 @@ export class SongFormComponent implements OnInit, OnDestroy {
   }
   private createSongObject() {
     const formValue = this.songForm.value;
-    debugger;
     return {
       uri: this.songUri || 'new-song-' + Date.now(),
       name: formValue.name,
@@ -127,6 +125,7 @@ export class SongFormComponent implements OnInit, OnDestroy {
   onCancel(): void {
     if (this.isEditPage) {
       this.songForm.patchValue(this.originalFormData);
+      localStorage.setItem('unsavedFormData', JSON.stringify({}));
       return;
     }
     this.resetForm();
