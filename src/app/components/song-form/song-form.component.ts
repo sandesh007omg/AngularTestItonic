@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataApiService } from 'src/app/service/data-api.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -43,6 +43,11 @@ export class SongFormComponent implements OnInit, OnDestroy {
     });
     this.formChangeSubscription = this.songForm.valueChanges.subscribe(() => {
       this.saveFormDataToLocalStorage();
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.resetLocalStorage();
+      }
     });
   }
   private prefillUnsavedData() {
@@ -129,6 +134,9 @@ export class SongFormComponent implements OnInit, OnDestroy {
       return;
     }
     this.resetForm();
+  }
+  private resetLocalStorage() {
+    localStorage.removeItem('unsavedFormData');
   }
   ngOnDestroy() {
     this.formChangeSubscription.unsubscribe();
